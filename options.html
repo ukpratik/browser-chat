@@ -46,15 +46,25 @@
               <option value="openai">OpenAI compatible</option>
               <option value="gemini">Gemini</option>
               <option value="deepseek">Deepseek</option>
+              <option value="custom">Custom (OpenAI compatible)</option>
             </select>
+          </label>
+          <label id="customProviderNameWrap" style="display: none">
+            Custom Provider Name
+            <input
+              id="customProviderName"
+              type="text"
+              placeholder="My Provider"
+            />
           </label>
           <label>
             Model
+            <select id="modelSelect"></select>
             <input
-              id="model"
+              id="customModel"
               type="text"
-              placeholder="e.g. gpt-4o-mini"
-              required
+              placeholder="Custom model name"
+              style="display: none"
             />
           </label>
         </div>
@@ -71,6 +81,21 @@
               type="text"
               placeholder="https://api.openai.com/v1"
             />
+          </label>
+        </div>
+
+        <div class="row">
+          <label>
+            Output Font
+            <select id="outputFont">
+              <option value="system">System</option>
+              <option value="serif">Serif</option>
+              <option value="mono">Monospace</option>
+            </select>
+          </label>
+          <label>
+            Output Text Size (px)
+            <input id="outputTextSize" type="number" min="10" max="28" placeholder="14" />
           </label>
         </div>
 
