@@ -26,6 +26,10 @@ Chrome MV3 extension to summarize pages or selections and chat with the selected
 3. Set output font (System/Serif/Monospace) and text size (px).
 4. Save.
 
+API keys
+- OpenAI: Sign in at https://platform.openai.com/ → API Keys → “Create new secret key” → copy `sk-...`.
+- Deepseek: Sign in at https://platform.deepseek.com/ → API Keys → “Create new key” → copy the key string.
+
 ## Usage
 - Summarize Page: summarizes extracted page text.
 - Summarize Selection: highlights text first, then summarize.
