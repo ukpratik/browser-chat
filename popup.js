@@ -7,6 +7,10 @@ const chatPromptEl = document.getElementById("chatPrompt");
 const openOptionsEl = document.getElementById("openOptions");
 const cancelStreamBtn = document.getElementById("cancelStream");
 
+if (!cancelStreamBtn) {
+  throw new Error("Missing cancelStream button in popup.html");
+}
+
 let activePort = null;
 let cachedSettings = null;
 
@@ -133,7 +137,7 @@ function getSettings() {
 }
 
 function supportsStreaming(provider) {
-  return provider === "openai" || provider === "deepseek";
+  return provider === "openai" || provider === "deepseek" || provider === "custom";
 }
 
 async function streamRequest({ mode, text, userPrompt }) {
@@ -205,7 +209,6 @@ async function sendMessageWithRetry(tabId, payload) {
   try {
     return await sendMessage(tabId, payload);
   } catch (err) {
-    // Attempt to inject the content script and retry once.
     await injectContentScript(tabId);
     return sendMessage(tabId, payload);
   }
@@ -237,3 +240,19 @@ function injectContentScript(tabId) {
   });
 }
 
+function applyOutputStyle(settings) {
+  const font = settings.outputFont || "system";
+  const textSize = Number(settings.outputTextSize) || 14;
+
+  let fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  if (font === "serif") fontFamily = 'Georgia, "Times New Roman", serif';
+  if (font === "mono") fontFamily = 'SFMono-Regular, Menlo, Consolas, "Courier New", monospace';
+
+  resultEl.style.fontFamily = fontFamily;
+  resultEl.style.fontSize = `${textSize}px`;
+}
+
+(async () => {
+  const settings = await getSettings();
+  applyOutputStyle(settings);
+})();

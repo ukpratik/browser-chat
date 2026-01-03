@@ -46,15 +46,25 @@
               <option value="openai">OpenAI compatible</option>
               <option value="gemini">Gemini</option>
               <option value="deepseek">Deepseek</option>
+              <option value="custom">Custom (OpenAI compatible)</option>
             </select>
+          </label>
+          <label id="customProviderNameWrap" style="display: none">
+            Custom Provider Name
+            <input
+              id="customProviderName"
+              type="text"
+              placeholder="My Provider"
+            />
           </label>
           <label>
             Model
+            <select id="modelSelect"></select>
             <input
-              id="model"
+              id="customModel"
               type="text"
-              placeholder="e.g. gpt-4o-mini"
-              required
+              placeholder="Custom model name"
+              style="display: none"
             />
           </label>
         </div>
