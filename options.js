@@ -4,6 +4,8 @@ const modelEl = document.getElementById("model");
 const apiKeyEl = document.getElementById("apiKey");
 const baseUrlEl = document.getElementById("baseUrl");
 const statusEl = document.getElementById("status");
+const outputFontEl = document.getElementById("outputFont");
+const outputTextSizeEl = document.getElementById("outputTextSize");
 
 const PROVIDER_DEFAULTS = {
   openai: {
@@ -23,6 +25,11 @@ const PROVIDER_DEFAULTS = {
   }
 };
 
+const OUTPUT_DEFAULTS = {
+  font: "system",
+  textSize: 14
+};
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   statusEl.textContent = "Saving...";
@@ -35,7 +42,11 @@ form.addEventListener("submit", async (e) => {
     baseUrl:
       baseUrlEl.value.trim() ||
       PROVIDER_DEFAULTS[provider]?.baseUrl ||
-      PROVIDER_DEFAULTS.openai.baseUrl
+      PROVIDER_DEFAULTS.openai.baseUrl,
+    outputFont: outputFontEl.value || OUTPUT_DEFAULTS.font,
+    outputTextSize:
+      Number(outputTextSizeEl.value) ||
+      OUTPUT_DEFAULTS.textSize
   };
 
   try {
@@ -56,6 +67,8 @@ form.addEventListener("submit", async (e) => {
   modelEl.value = settings.model || defaults.model;
   apiKeyEl.value = settings.apiKey || "";
   baseUrlEl.value = settings.baseUrl || defaults.baseUrl;
+  outputFontEl.value = settings.outputFont || OUTPUT_DEFAULTS.font;
+  outputTextSizeEl.value = settings.outputTextSize || OUTPUT_DEFAULTS.textSize;
 
   updatePlaceholders(providerEl.value);
 })();

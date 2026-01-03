@@ -74,6 +74,21 @@
           </label>
         </div>
 
+        <div class="row">
+          <label>
+            Output Font
+            <select id="outputFont">
+              <option value="system">System</option>
+              <option value="serif">Serif</option>
+              <option value="mono">Monospace</option>
+            </select>
+          </label>
+          <label>
+            Output Text Size (px)
+            <input id="outputTextSize" type="number" min="10" max="28" placeholder="14" />
+          </label>
+        </div>
+
         <button type="submit">Save</button>
         <div class="status" id="status"></div>
       </form>
