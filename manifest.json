@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "Web Page Summarizer & Chat Assistant",
+  "version": "0.1.0",
+  "description": "Summarize pages or selections and chat with page context using your chosen LLM provider directly in the browser.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_title": "Summarize / Chat",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
+

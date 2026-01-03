@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        width: auto;
+        max-width: 720px;
+      }
+      .form {
+        display: grid;
+        gap: 12px;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-weight: 600;
+      }
+      input,
+      select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>LLM Provider Settings</h2>
+      <p>Choose a provider, model, API key, and optional custom base URL.</p>
+
+      <form id="settingsForm" class="form">
+        <div class="row">
+          <label>
+            Provider
+            <select id="provider">
+              <option value="openai">OpenAI compatible</option>
+              <option value="gemini">Gemini</option>
+              <option value="deepseek">Deepseek</option>
+            </select>
+          </label>
+          <label>
+            Model
+            <input
+              id="model"
+              type="text"
+              placeholder="e.g. gpt-4o-mini"
+              required
+            />
+          </label>
+        </div>
+
+        <div class="row">
+          <label>
+            API Key
+            <input id="apiKey" type="password" placeholder="sk-..." required />
+          </label>
+          <label>
+            Base URL (optional)
+            <input
+              id="baseUrl"
+              type="text"
+              placeholder="https://api.openai.com/v1"
+            />
+          </label>
+        </div>
+
+        <button type="submit">Save</button>
+        <div class="status" id="status"></div>
+      </form>
+    </div>
+
+    <script src="options.js"></script>
+  </body>
+</html>
+

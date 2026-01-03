@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Summarizer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h2>Summarizer & Chat</h2>
+        <a id="openOptions" href="#">Settings</a>
+      </header>
+
+      <div class="actions">
+        <button id="summarizePage">Summarize Page</button>
+        <button id="summarizeSelection">Summarize Selection</button>
+      </div>
+
+      <div class="chat">
+        <label for="chatPrompt">Chat with selection</label>
+        <textarea
+          id="chatPrompt"
+          rows="3"
+          placeholder="Ask a question about the selected text"
+        ></textarea>
+        <button id="chatSelection">Send</button>
+      </div>
+
+      <div class="status" id="status"></div>
+      <pre class="result" id="result"></pre>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
+
