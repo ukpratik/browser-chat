@@ -187,6 +187,24 @@ function toggleCancel(show) {
   cancelStreamBtn.style.display = show ? "block" : "none";
 }
 
+function applyOutputStyle(settings) {
+  const font = settings.outputFont || "system";
+  const textSize = Number(settings.outputTextSize) || 14;
+
+  let fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  if (font === "serif") fontFamily = 'Georgia, "Times New Roman", serif';
+  if (font === "mono") fontFamily = 'SFMono-Regular, Menlo, Consolas, "Courier New", monospace';
+
+  resultEl.style.fontFamily = fontFamily;
+  resultEl.style.fontSize = `${textSize}px`;
+}
+
+// Apply style on load
+(async () => {
+  const settings = await getSettings();
+  applyOutputStyle(settings);
+})();
+
 async function sendMessageWithRetry(tabId, payload) {
   try {
     return await sendMessage(tabId, payload);

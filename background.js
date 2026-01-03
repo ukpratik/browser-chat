@@ -197,6 +197,97 @@ async function callOpenAI({ apiKey, baseUrl, model, messages }) {
   return content.trim();
 }
 
+async function streamOpenAICompatible({ port, apiKey, baseUrl, model, messages, signal }) {
+  const url = `${baseUrl.replace(/\/+$/, "")}/chat/completions`;
+  const body = {
+    model,
+    messages,
+    temperature: 0.3,
+    stream: true
+  };
+
+  const resp = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`
+    },
+    body: JSON.stringify(body),
+    signal
+  });
+
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Model request failed: ${resp.status} ${text}`);
+  }
+
+  const reader = resp.body?.getReader();
+  if (!reader) {
+    throw new Error("Streaming not supported by response body.");
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const parts = buffer.split("\n\n");
+    buffer = parts.pop() || "";
+
+    for (const part of parts) {
+      const line = part.trim();
+      if (!line.startsWith("data:")) continue;
+
+      const payload = line.replace(/^data:\s*/, "");
+      if (payload === "[DONE]") {
+        port.postMessage({ type: "done" });
+        return;
+      }
+
+      try {
+        const json = JSON.parse(payload);
+        const deltaText = extractDeltaText(json);
+        if (deltaText) {
+          port.postMessage({ type: "chunk", content: deltaText });
+        }
+      } catch (err) {
+        port.postMessage({ type: "error", message: err?.message || "Stream parse error" });
+      }
+    }
+  }
+
+  if (buffer.trim()) {
+    try {
+      const json = JSON.parse(buffer.trim().replace(/^data:\s*/, ""));
+      const deltaText = extractDeltaText(json);
+      if (deltaText) {
+        port.postMessage({ type: "chunk", content: deltaText });
+      }
+    } catch (_) {
+      // ignore trailing parse errors
+    }
+  }
+
+  port.postMessage({ type: "done" });
+}
+
+function extractDeltaText(json) {
+  // OpenAI-compatible stream: choices[0].delta.content can be string or array
+  const delta = json?.choices?.[0]?.delta;
+  if (!delta) return "";
+  if (typeof delta.content === "string") return delta.content;
+  if (Array.isArray(delta.content)) {
+    return delta.content
+      .map((c) => (typeof c?.text === "string" ? c.text : c?.content || ""))
+      .filter(Boolean)
+      .join("");
+  }
+  return "";
+}
+
 async function callGemini({ apiKey, baseUrl, model, messages }) {
   const urlBase = baseUrl.replace(/\/+$/, "");
   const promptText = messages
